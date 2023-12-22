@@ -35,9 +35,9 @@ void Schwefel(Gorilla *X) {
 
 void Rana(Gorilla *X){
     for (i = 0; i < DIM -1; i++) {
-        X ->fitness += (X->coordinates[i] * cos(sqrt(abs(X->coordinates[i]+1 + X->coordinates[i] + 1)))
+        X ->fitness += (X->coordinates[i] * cos(sqrt(abs(X->coordinates[i+1] + X->coordinates[i] + 1)))
                          * sin(sqrt(abs(X->coordinates[i+1] - X->coordinates[i] + 1))) 
-                         + (1 + X->coordinates[i+1]) * cos(sqrt(abs(X->coordinates[i]+1 - X->coordinates[i] + 1))) 
+                         + (1 + X->coordinates[i+1]) * cos(sqrt(abs(X->coordinates[i+1] - X->coordinates[i] + 1))) 
                          * sin(sqrt(abs(X->coordinates[i+1] +X->coordinates[i] + 1))));
     }
 }
