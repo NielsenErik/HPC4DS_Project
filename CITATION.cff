@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Nielsen
+    given-names: Erik
+  - family-names: Ferrari
+    given-names: Pietro
+    
+title: "Parallel Artificial Gorilla Troops Optimizer"
+version: 1.0.0
+date-released: 2023-12-31
+url: https://github.com/NielsenErik/HPC4DS_Project
