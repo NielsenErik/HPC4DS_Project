@@ -27,6 +27,7 @@ void Rastrigin(Gorilla *X) {
 }
 
 void Schwefel(Gorilla *X) {
+    int i;
     X->fitness = 418.9829 * DIM;
     for (i = 0; i < DIM; i++) {
         X ->fitness += (X->coordinates[i] * sin(sqrt(abs(X->coordinates[i]))))
@@ -34,6 +35,7 @@ void Schwefel(Gorilla *X) {
 }
 
 void Rana(Gorilla *X){
+    int i;
     for (i = 0; i < DIM -1; i++) {
         X ->fitness += (X->coordinates[i] * cos(sqrt(abs(X->coordinates[i+1] + X->coordinates[i] + 1)))
                          * sin(sqrt(abs(X->coordinates[i+1] - X->coordinates[i] + 1))) 
