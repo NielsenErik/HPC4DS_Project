@@ -9,8 +9,9 @@
 #include <time.h>
 
 #define beta 3
+#define N 64
 #define p 0.03
-#define SELECTED_FUNCTION RANA
+#define SELECTED_FUNCTION RASTRIGIN 
 #define T 100000
 #define W 0.8
 
@@ -18,8 +19,6 @@
 #define SPHERE 1
 #define STYBLINSKI_TANG 2
 #define RASTRIGIN 3
-#define SCHWEFEL 4
-#define RANA 5
 // ---------------------------------------
 
 // Define FUNCTION based on the function selection
@@ -27,12 +26,8 @@
     #define FUNCTION sphere
 #elif SELECTED_FUNCTION == STYBLINSKI_TANG
     #define FUNCTION Styblinski_Tang
-#elif SELECTED_FUNCTION == RASTRIGIN
+#else
     #define FUNCTION Rastrigin
-#elif SELECTED_FUNCTION == SCHWEFEL
-    #define FUNCTION Schwefel
-#else 
-    #define FUNCTION Rana
 #endif
 // ------------------------------------------
 
