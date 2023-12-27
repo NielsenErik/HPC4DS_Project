@@ -19,6 +19,8 @@
 #define SPHERE 1
 #define STYBLINSKI_TANG 2
 #define RASTRIGIN 3
+#define SCHWEFEL 4
+#define RANA 5
 // ---------------------------------------
 
 // Define FUNCTION based on the function selection
@@ -26,6 +28,10 @@
     #define FUNCTION sphere
 #elif SELECTED_FUNCTION == STYBLINSKI_TANG
     #define FUNCTION Styblinski_Tang
+#elif SELECTED_FUNCTION == SCHWEFEL
+    #define FUNCTION Schwefel
+#elif SELECTED_FUNCTION == RANA
+    #define FUNCTION Rana
 #else
     #define FUNCTION Rastrigin
 #endif
