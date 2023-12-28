@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#PBS -l select=4:ncpus=16:mem=2gb -l place=pack:excl
+#PBS -l select=4:ncpus=16:mem=2gb
 
 #set max execution time
 #PBS -l walltime=0:20:00

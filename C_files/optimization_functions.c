@@ -30,7 +30,7 @@ void Schwefel(Gorilla *X) {
     int i;
     X->fitness = 418.9829 * DIM;
     for (i = 0; i < DIM; i++) {
-        X ->fitness += (X->coordinates[i] * sin(sqrt(abs(X->coordinates[i]))))
+        X ->fitness += (X->coordinates[i] * sin(sqrt(abs(X->coordinates[i]))));
     }
 }
 
