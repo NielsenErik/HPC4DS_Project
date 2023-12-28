@@ -11,7 +11,7 @@
 #define beta 3
 #define N 64
 #define p 0.03
-#define SELECTED_FUNCTION RASTRIGIN 
+#define SELECTED_FUNCTION SPHERE
 #define T 100000
 #define W 0.8
 
@@ -46,6 +46,8 @@ typedef struct {
 void sphere(Gorilla *X);
 void Styblinski_Tang(Gorilla *X);
 void Rastrigin(Gorilla *X);
+void Rana(Gorilla *X);
+void Schwefel(Gorilla *X);
 // -------------------------------
 
 // common_functions.c ---------------------------------------------------------------------------------------------------------------------------------------------
