@@ -9,4 +9,5 @@
 #PBS -q short_cpuQ
 
 module load mpich-3.2 # Load the required module
+export OMP_PLACES=threads
 mpirun.actual -n 64 ./executables/GTO_parallel_

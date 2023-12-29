@@ -1,4 +1,16 @@
 #include "GTO.h"
+#define _GNU_SOURCE
+
+#include <math.h>
+#include <mpi.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <sched.h>
+#ifdef _OPENMP
+# include <omp.h>
+#endif
 
 /* TODO:
 // - Understand why we should elevate M to the power of g and then to the power of 1/g

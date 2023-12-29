@@ -1,12 +1,18 @@
 #ifndef GTO_H
 #define GTO_H
 
+#define _GNU_SOURCE
+
 #include <math.h>
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <sched.h>
+#ifdef _OPENMP
+# include <omp.h>
+#endif
 
 #define beta 3
 #define N 64

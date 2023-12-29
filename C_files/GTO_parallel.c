@@ -1,4 +1,10 @@
 #include <stddef.h>
+#define _GNU_SOURCE
+#include <sched.h>
+#include <mpi.h>
+#ifdef _OPENMP
+    # include <omp.h>
+#endif
 #include "GTO.h"
 
 void findGlobalSilverback(void *in, void *out, int *len, MPI_Datatype *dt) {
