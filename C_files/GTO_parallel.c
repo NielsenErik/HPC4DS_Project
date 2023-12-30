@@ -16,6 +16,7 @@ void updateGlobalSilverback(MPI_Datatype dt, MPI_Op myOp, Gorilla *silverback) {
 }
 
 int main() {
+    printf("Starting benchmark on: %d", SELECTED_FUNCTION);
 	MPI_Init(NULL, NULL);
     MPI_Barrier(MPI_COMM_WORLD);
     double t1 = MPI_Wtime();
