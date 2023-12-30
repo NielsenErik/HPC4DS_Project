@@ -9,7 +9,7 @@
 #include <time.h>
 #include <sched.h>
 #ifdef _OPENMP
-# include <omp.h>
+    # include <omp.h>
 #endif
 
 /* TODO:

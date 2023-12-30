@@ -10,4 +10,4 @@
 
 module load mpich-3.2 # Load the required module
 export OMP_PLACES=threads
-mpirun.actual -n 16 HPC4DS_Project/executables/GTO_parallel_512
+mpiexec -np 16 HPC4DS_Project/executables/GTO_parallel_512
