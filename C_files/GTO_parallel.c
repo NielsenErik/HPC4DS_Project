@@ -1,10 +1,6 @@
 #include <stddef.h>
-#define _GNU_SOURCE
 #include <sched.h>
 #include <mpi.h>
-#ifdef _OPENMP
-    # include <omp.h>
-#endif
 #include "GTO.h"
 
 void findGlobalSilverback(void *in, void *out, int *len, MPI_Datatype *dt) {
@@ -42,7 +38,7 @@ int main() {
     initialization(&lb, &ub, gorilla_per_process, GX, &silverback, X);
     updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
     //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
-    
+    # pragma omp barrier
     for (i = 0; i < T; i++) {
         double C, L, global_M[DIM], M[DIM];
 
