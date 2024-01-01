@@ -11,7 +11,7 @@
 #define beta 3
 #define N 64
 #define p 0.03
-#define SELECTED_FUNCTION SPHERE
+#define SELECTED_FUNCTION RASTRIGIN
 #define T 100000
 #define W 0.8
 

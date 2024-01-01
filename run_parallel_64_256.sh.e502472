@@ -1,0 +1,14 @@
+Could not chdir to home directory /home/erik.nielsen: Permission denied
+Could not chdir to home directory /home/erik.nielsen: Permission denied
+Could not chdir to home directory /home/erik.nielsen: Permission denied
+bash: /home/erik.nielsen/.bashrc: Permission denied
+bash: /home/erik.nielsen/.bashrc: Permission denied
+bash: /home/erik.nielsen/.bashrc: Permission denied
+[proxy:0:1@hpc-c09-node12.maas.icts.unitn.it] launch_procs (pm/pmiserv/pmip_cb.c:640): unable to change wdir to /home/erik.nielsen (Permission denied)
+[proxy:0:1@hpc-c09-node12.maas.icts.unitn.it] HYD_pmcd_pmip_control_cmd_cb (pm/pmiserv/pmip_cb.c:892): launch_procs returned error
+[proxy:0:1@hpc-c09-node12.maas.icts.unitn.it] HYDT_dmxu_poll_wait_for_event (tools/demux/demux_poll.c:76): callback returned error status
+[proxy:0:1@hpc-c09-node12.maas.icts.unitn.it] main (pm/pmiserv/pmip.c:206): demux engine error waiting for event
+[mpiexec@hpc-c05-node04.unitn.it] control_cb (pm/pmiserv/pmiserv_cb.c:200): assert (!closed) failed
+[mpiexec@hpc-c05-node04.unitn.it] HYDT_dmxu_poll_wait_for_event (tools/demux/demux_poll.c:76): callback returned error status
+[mpiexec@hpc-c05-node04.unitn.it] HYD_pmci_wait_for_completion (pm/pmiserv/pmiserv_pmci.c:198): error waiting for event
+[mpiexec@hpc-c05-node04.unitn.it] main (ui/mpich/mpiexec.c:344): process manager error waiting for completion

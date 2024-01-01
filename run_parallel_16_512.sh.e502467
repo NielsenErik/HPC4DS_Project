@@ -1,0 +1,2 @@
+=>> PBS: job killed: walltime 3688 exceeded limit 3600
+-bash: line 1: 86671 Terminated              /var/spool/pbs/mom_priv/jobs/502467.hpc-head-n1.unitn.it.SC
