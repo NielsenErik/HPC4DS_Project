@@ -1,37 +1,19 @@
 Sphere
-508953.hpc-head-n run_parallel_2_  erik.nielsen      00:00:00 R short_cpuQ      
-508954.hpc-head-n run_parallel_2_  erik.nielsen      00:00:00 R short_cpuQ      
-508955.hpc-head-n run_parallel_2_  erik.nielsen      00:00:00 R short_cpuQ      
-508956.hpc-head-n run_parallel_4_  erik.nielsen      00:00:00 R short_cpuQ      
-508957.hpc-head-n run_parallel_4_  erik.nielsen      00:00:00 R short_cpuQ      
-508958.hpc-head-n run_parallel_4_  erik.nielsen      00:00:00 R short_cpuQ      
-508959.hpc-head-n run_parallel_8_  erik.nielsen      00:00:00 R short_cpuQ      
-508960.hpc-head-n run_parallel_8_  erik.nielsen      00:00:00 R short_cpuQ      
-508961.hpc-head-n run_parallel_8_  erik.nielsen      00:00:00 R short_cpuQ      
-508962.hpc-head-n run_parallel_16  erik.nielsen      00:00:00 R short_cpuQ      
-508963.hpc-head-n run_parallel_16  erik.nielsen      00:00:00 R short_cpuQ      
-508964.hpc-head-n run_parallel_16  erik.nielsen      00:00:00 R short_cpuQ      
-508965.hpc-head-n run_parallel_32  erik.nielsen      00:00:00 R short_cpuQ      
-508966.hpc-head-n run_parallel_32  erik.nielsen      00:00:00 R short_cpuQ      
-508967.hpc-head-n run_parallel_32
-serial
-508891.hpc-head-n1.unitn.it
-508892.hpc-head-n1.unitn.it
-508893.hpc-head-n1.unitn.it
-
-run 2
-508985.hpc-head-n1.unitn.it
-508986.hpc-head-n1.unitn.it
-508987.hpc-head-n1.unitn.it
-508988.hpc-head-n1.unitn.it
-508989.hpc-head-n1.unitn.it
-508990.hpc-head-n1.unitn.it
-508991.hpc-head-n1.unitn.it
-508992.hpc-head-n1.unitn.it
-508993.hpc-head-n1.unitn.it
-508994.hpc-head-n1.unitn.it
-508995.hpc-head-n1.unitn.it
-508996.hpc-head-n1.unitn.it
-508997.hpc-head-n1.unitn.it
-508998.hpc-head-n1.unitn.it
-508999.hpc-head-n1.unitn.it
+509056.hpc-head-n1.unitn.it
+509057.hpc-head-n1.unitn.it
+509058.hpc-head-n1.unitn.it
+509059.hpc-head-n1.unitn.it
+509060.hpc-head-n1.unitn.it
+509061.hpc-head-n1.unitn.it
+509062.hpc-head-n1.unitn.it
+509063.hpc-head-n1.unitn.it
+509064.hpc-head-n1.unitn.it
+509065.hpc-head-n1.unitn.it
+509066.hpc-head-n1.unitn.it
+509067.hpc-head-n1.unitn.it
+509068.hpc-head-n1.unitn.it
+509069.hpc-head-n1.unitn.it
+509070.hpc-head-n1.unitn.it
+509071.hpc-head-n1.unitn.it
+509072.hpc-head-n1.unitn.it
+509073.hpc-head-n1.unitn.it
