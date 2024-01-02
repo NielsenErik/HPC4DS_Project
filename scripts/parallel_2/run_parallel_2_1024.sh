@@ -8,6 +8,6 @@
 #imposta la coda di esecuzione
 #PBS -q short_cpuQ
 
-module load mpich-3.2 # Load the required module
-export OMP_PLACES=threads
+module load mpich-3.2 # Load the required moduleqsta
+export OMP_NESTED=TRUE
 mpiexec -np 2 HPC4DS_Project/executables/GTO_parallel_1024

@@ -18,7 +18,6 @@ void updateGlobalSilverback(MPI_Datatype dt, MPI_Op myOp, Gorilla *silverback) {
 }
 
 int main() {
-    printf("Starting benchmark on: %d", SELECTED_FUNCTION);
 	MPI_Init(NULL, NULL);
     MPI_Barrier(MPI_COMM_WORLD);
     double t1 = MPI_Wtime();
@@ -38,7 +37,7 @@ int main() {
     initialization(&lb, &ub, gorilla_per_process, GX, &silverback, X);
     updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
     //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
-    # pragma omp barrier
+
     for (i = 0; i < T; i++) {
         double C, L, global_M[DIM], M[DIM];
 
@@ -49,12 +48,14 @@ int main() {
         MPI_Bcast(&C, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         MPI_Bcast(&L, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         // ------------------------------------------------------------------------        
+        #pragma omp barrier
         exploration(C, L, lb, ub, M, gorilla_per_process, GX, &silverback, old_GX, X);
         updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
         //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
         MPI_Allreduce(M, global_M, DIM, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD); // Use MPI_Allreduce to compute the global sum array
         exploitation(C, L, lb, ub, global_M, gorilla_per_process, GX, &silverback, X);
         updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
+        #pragma omp barrier
         //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
     }
 
