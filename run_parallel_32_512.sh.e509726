@@ -1,5 +1,0 @@
-[mpiexec@hpc-g04-node02.unitn.it] match_arg (utils/args/args.c:159): unrecognized argument report-bindings
-[mpiexec@hpc-g04-node02.unitn.it] HYDU_parse_array (utils/args/args.c:174): argument matching returned error
-[mpiexec@hpc-g04-node02.unitn.it] parse_args (ui/mpich/utils.c:1596): error parsing input array
-[mpiexec@hpc-g04-node02.unitn.it] HYD_uii_mpx_get_parameters (ui/mpich/utils.c:1648): unable to parse user arguments
-[mpiexec@hpc-g04-node02.unitn.it] main (ui/mpich/mpiexec.c:153): error parsing parameters
