@@ -59,9 +59,9 @@ void Schwefel(Gorilla *X);
 // common_functions.c ---------------------------------------------------------------------------------------------------------------------------------------------
 void boundaryCheck(double max, double min, double *value);
 void checkForUpdatePosition(Gorilla *GX, Gorilla *silverback, Gorilla *X);
-void exploitation(double C, double L, double lb, double ub, double M[], int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla X[]);
-void exploration(double C, double L, double lb, double ub, double M[], int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla old_GX[], Gorilla X[]);
-void initialization(double *lb, double *ub, int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla X[]);
+void exploitation(double C, double L, double lb, double ub, double M[], int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla X[], int n_threads);
+void exploration(double C, double L, double lb, double ub, double M[], int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla old_GX[], Gorilla X[], int n_threads);
+void initialization(double *lb, double *ub, int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla X[], int n_threads);
 void printSearchAgentsData(int gorilla_per_process, int rank, long double silverback_fitness, Gorilla X[]);
 double rand01();
 double randn();

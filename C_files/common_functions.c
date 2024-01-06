@@ -12,6 +12,8 @@
 // - Understand why we should elevate M to the power of g and then to the power of 1/g
 */
 
+
+
 void boundaryCheck(double max, double min, double *value) {
     if (*value > max)
         *value = max;
@@ -30,13 +32,12 @@ void checkForUpdatePosition(Gorilla *GX, Gorilla *silverback, Gorilla *X) {
     }
 }
 
-void exploitation(double C, double L, double lb, double ub, double M[], int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla X[]) {
+void exploitation(double C, double L, double lb, double ub, double M[], int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla X[], int n_threads) {
     int j, k;
     Gorilla old_silverback;
     memcpy(&old_silverback, silverback, sizeof(Gorilla));
-    double t1 = MPI_Wtime();
     if (C >= W)
-        #pragma omp parallel for num_threads((DIM <= 8) ? DIM : 16) private(k), shared(M, X, old_silverback)
+        #pragma omp parallel for num_threads(n_threads) private(k), shared(M, X, old_silverback)
         for (j = 0; j < gorilla_per_process; j++) {
             for (k = 0; k < DIM; k++) {
                 GX[j].coordinates[k] = L * fabs(M[k] / DIM) * (X[j].coordinates[k] - old_silverback.coordinates[k]) + X[j].coordinates[k];
@@ -46,7 +47,7 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
             checkForUpdatePosition(&GX[j], silverback, &X[j]);
         }
     else
-        #pragma omp parallel for num_threads((DIM <= 8) ? DIM : 16) private(k) shared(GX, old_silverback)
+        #pragma omp parallel for num_threads(n_threads) private(k) shared(GX, X, old_silverback)
         for (j = 0; j < gorilla_per_process; j++) {
             double Q = 2 * rand01() - 1;
 
@@ -65,18 +66,15 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
 
             checkForUpdatePosition(&GX[j], silverback, &X[j]);
         }
-    double t2 = MPI_Wtime();
-    printf("Exploitation time: %f\n", t2 - t1);
 }
 
-void exploration(double C, double L, double lb, double ub, double M[], int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla old_GX[], Gorilla X[]) {
+void exploration(double C, double L, double lb, double ub, double M[], int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla old_GX[], Gorilla X[], int n_threads) {
     int j, k, r = rand() % gorilla_per_process;
     memcpy(old_GX, GX, gorilla_per_process * sizeof(Gorilla)); // Create a deep copy of GX into old_GX
-    double t1 = MPI_Wtime();
     for(j = 0; j < DIM; j++)
         M[j] = 0;
 
-    #pragma omp parallel for num_threads((DIM <= 8) ? DIM : 16) private(k) shared(M, GX)
+    #pragma omp parallel for num_threads(n_threads) private(k) shared(M, X, old_GX, GX)
     for (j = 0; j < gorilla_per_process; j++) {
         if (rand01() < p)
             for(k = 0; k < DIM; k++) {
@@ -99,14 +97,11 @@ void exploration(double C, double L, double lb, double ub, double M[], int goril
 
         checkForUpdatePosition(&GX[j], silverback, &X[j]);
     }
-    double t2 = MPI_Wtime();
-    printf("Exploration time: %f\n", t2 - t1);
 }
 
-void initialization(double *lb, double *ub, int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla X[]) {
+void initialization(double *lb, double *ub, int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla X[], int n_threads) {
     int i, j;
     silverback->fitness = INFINITY;
-    double t1 = MPI_Wtime();
     switch(SELECTED_FUNCTION) {
         case 1:
             *lb = -100;
@@ -124,7 +119,7 @@ void initialization(double *lb, double *ub, int gorilla_per_process, Gorilla GX[
             exit(1);
             break;
     }
-    #pragma omp parallel for num_threads((DIM <= 8) ? DIM : 16) private(j) shared(X, GX)   
+    #pragma omp parallel for num_threads(n_threads) private(j) shared(X, GX)   
     for (i = 0; i < gorilla_per_process; i++) {
         for (j = 0; j < DIM; j++) {
             X[i].coordinates[j] = rand01() * (*ub - *lb) + *lb;
@@ -135,9 +130,7 @@ void initialization(double *lb, double *ub, int gorilla_per_process, Gorilla GX[
         
         if (X[i].fitness < silverback->fitness)
             memcpy(silverback, X, sizeof(Gorilla));
-    }   
-    double t2 = MPI_Wtime();
-    printf("Initialization time: %f\n", t2 - t1);
+    }
 }
 
 // Print search agents' positions
