@@ -36,7 +36,6 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
     int j, k;
     Gorilla old_silverback;
     memcpy(&old_silverback, silverback, sizeof(Gorilla));
-    double t1 = MPI_Wtime();
     if (C >= W){
         #pragma omp parallel for num_threads(n_threads) private(k), shared(M, X, old_silverback) schedule(runtime)
         for (j = 0; j < gorilla_per_process; j++) {
@@ -69,8 +68,6 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
             checkForUpdatePosition(&GX[j], silverback, &X[j]);
         }
     }
-    double t2 = MPI_Wtime();
-    printf("Expliotation time %f\n", t2-t1);
 }
 
 void exploration(double C, double L, double lb, double ub, double M[], int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla old_GX[], Gorilla X[], int n_threads) {
