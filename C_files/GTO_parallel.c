@@ -23,7 +23,6 @@ int main() {
     double t1 = MPI_Wtime();
     double lb, ub;
     int comm_sz, i, rank;
-    int n_threads = omp_get_num_threads();
     MPI_Datatype MPI_GORILLA;
     MPI_Op myOp;
     Gorilla silverback;
@@ -35,25 +34,24 @@ int main() {
     MPI_Type_commit(&MPI_GORILLA);
     MPI_Op_create(findGlobalSilverback, 1, &myOp); 
     srand(time(NULL) + rank); // Seed the random number generator
-    initialization(&lb, &ub, gorilla_per_process, GX, &silverback, X, n_threads);
+    initialization(&lb, &ub, gorilla_per_process, GX, &silverback, X);
     updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
     //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
 
     for (i = 0; i < T; i++) {
         double C, L, global_M[DIM], M[DIM];
-
         if (rank == 0)
             C = (cos(2.0 * rand01()) + 1) * (1.0 - (double)i / T), L = C * unifrnd(1);
 
         // Broadcast the data from the root process (rank 0) to all other processes
         MPI_Bcast(&C, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         MPI_Bcast(&L, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-        // ------------------------------------------------------------------------        
-        exploration(C, L, lb, ub, M, gorilla_per_process, GX, &silverback, old_GX, X, n_threads);
+        // ------------------------------------------------------------------------      
+        exploration(C, L, lb, ub, M, gorilla_per_process, GX, &silverback, old_GX, X);
         updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
         //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
         MPI_Allreduce(M, global_M, DIM, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD); // Use MPI_Allreduce to compute the global sum array
-        exploitation(C, L, lb, ub, global_M, gorilla_per_process, GX, &silverback, X, n_threads);
+        exploitation(C, L, lb, ub, global_M, gorilla_per_process, GX, &silverback, X);
         updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
         //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
     }
