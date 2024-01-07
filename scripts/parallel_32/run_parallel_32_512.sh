@@ -11,4 +11,5 @@
 module load mpich-3.2 # Load the required module
 export OMP_NESTED=TRUE
 export OMP_PLACES=threads
-mpiexec --report-bindings -np 32 --map-by node:pe=1 --bind-to core  HPC4DS_Project/executables/GTO_parallel_512
+export OMP_SCHEDULE="auto"
+mpiexec -np 32 HPC4DS_Project/executables/GTO_parallel_512

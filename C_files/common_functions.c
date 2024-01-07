@@ -36,8 +36,9 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
     int j, k;
     Gorilla old_silverback;
     memcpy(&old_silverback, silverback, sizeof(Gorilla));
-    if (C >= W)
-        #pragma omp parallel for num_threads(n_threads) private(k), shared(M, X, old_silverback)
+    double t1 = MPI_Wtime();
+    if (C >= W){
+        #pragma omp parallel for num_threads(n_threads) private(k), shared(M, X, old_silverback) schedule(runtime)
         for (j = 0; j < gorilla_per_process; j++) {
             for (k = 0; k < DIM; k++) {
                 GX[j].coordinates[k] = L * fabs(M[k] / DIM) * (X[j].coordinates[k] - old_silverback.coordinates[k]) + X[j].coordinates[k];
@@ -46,8 +47,9 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
 
             checkForUpdatePosition(&GX[j], silverback, &X[j]);
         }
-    else
-        #pragma omp parallel for num_threads(n_threads) private(k) shared(GX, X, old_silverback)
+    }
+    else{
+        #pragma omp parallel for num_threads(n_threads) private(k) shared(GX, X, old_silverback) schedule(runtime)
         for (j = 0; j < gorilla_per_process; j++) {
             double Q = 2 * rand01() - 1;
 
@@ -66,6 +68,9 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
 
             checkForUpdatePosition(&GX[j], silverback, &X[j]);
         }
+    }
+    double t2 = MPI_Wtime();
+    printf("Expliotation time %f\n", t2-t1);
 }
 
 void exploration(double C, double L, double lb, double ub, double M[], int gorilla_per_process, Gorilla GX[], Gorilla *silverback, Gorilla old_GX[], Gorilla X[], int n_threads) {
@@ -73,8 +78,7 @@ void exploration(double C, double L, double lb, double ub, double M[], int goril
     memcpy(old_GX, GX, gorilla_per_process * sizeof(Gorilla)); // Create a deep copy of GX into old_GX
     for(j = 0; j < DIM; j++)
         M[j] = 0;
-
-    #pragma omp parallel for num_threads(n_threads) private(k) shared(M, X, old_GX, GX)
+    #pragma omp parallel for num_threads(n_threads) private(k) shared(M, X, old_GX, GX) schedule(runtime)
     for (j = 0; j < gorilla_per_process; j++) {
         if (rand01() < p)
             for(k = 0; k < DIM; k++) {
@@ -119,7 +123,7 @@ void initialization(double *lb, double *ub, int gorilla_per_process, Gorilla GX[
             exit(1);
             break;
     }
-    #pragma omp parallel for num_threads(n_threads) private(j) shared(X, GX)   
+    #pragma omp parallel for num_threads(n_threads) private(j) shared(X, GX) schedule(static, 1)
     for (i = 0; i < gorilla_per_process; i++) {
         for (j = 0; j < DIM; j++) {
             X[i].coordinates[j] = rand01() * (*ub - *lb) + *lb;

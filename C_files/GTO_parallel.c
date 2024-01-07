@@ -13,8 +13,14 @@ void findGlobalSilverback(void *in, void *out, int *len, MPI_Datatype *dt) {
 
 void updateGlobalSilverback(MPI_Datatype dt, MPI_Op myOp, Gorilla *silverback) {
     Gorilla global_silverback;
+    double t1_allreduce = MPI_Wtime();
     MPI_Allreduce(silverback, &global_silverback, 1, dt, myOp, MPI_COMM_WORLD);
+    double t2_allreduce = MPI_Wtime();
+    printf("allreduce_time %f\n", t2_allreduce-t1_allreduce);
+    double t1_mcpy = MPI_Wtime();
     memcpy(silverback, &global_silverback, sizeof(Gorilla)); // Copy the entire struct from global_silverback to silverback
+    double t2_mcpy = MPI_Wtime();
+    printf("mcpy_time %f\n", t2_mcpy-t1_mcpy);
 }
 
 int main() {
@@ -23,6 +29,7 @@ int main() {
     double t1 = MPI_Wtime();
     double lb, ub;
     int comm_sz, i, rank;
+    int n_threads = omp_get_num_threads();
     MPI_Datatype MPI_GORILLA;
     MPI_Op myOp;
     Gorilla silverback;
@@ -34,12 +41,13 @@ int main() {
     MPI_Type_commit(&MPI_GORILLA);
     MPI_Op_create(findGlobalSilverback, 1, &myOp); 
     srand(time(NULL) + rank); // Seed the random number generator
-    initialization(&lb, &ub, gorilla_per_process, GX, &silverback, X);
+    initialization(&lb, &ub, gorilla_per_process, GX, &silverback, X, n_threads);
     updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
     //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
 
     for (i = 0; i < T; i++) {
         double C, L, global_M[DIM], M[DIM];
+        double t_1 = MPI_Wtime();
         if (rank == 0)
             C = (cos(2.0 * rand01()) + 1) * (1.0 - (double)i / T), L = C * unifrnd(1);
 
@@ -47,13 +55,21 @@ int main() {
         MPI_Bcast(&C, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         MPI_Bcast(&L, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         // ------------------------------------------------------------------------      
-        exploration(C, L, lb, ub, M, gorilla_per_process, GX, &silverback, old_GX, X);
+        exploration(C, L, lb, ub, M, gorilla_per_process, GX, &silverback, old_GX, X, n_threads);
+        double t1_update = MPI_Wtime();
         updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
+        double t2_update = MPI_Wtime();
+        printf("update_time %f\n", t2_update-t1_update);
         //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
+        double t1_allreduce = MPI_Wtime();
         MPI_Allreduce(M, global_M, DIM, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD); // Use MPI_Allreduce to compute the global sum array
-        exploitation(C, L, lb, ub, global_M, gorilla_per_process, GX, &silverback, X);
+        double t2_allreduce = MPI_Wtime();
+        printf("MAIN_allreduce_time %f\n", t2_allreduce-t1_allreduce);
+        exploitation(C, L, lb, ub, global_M, gorilla_per_process, GX, &silverback, X, n_threads);
         updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
         //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
+        double t_2 = MPI_Wtime();
+        printf("total time %f\n", t_2-t_1);
     }
 
     MPI_Op_free(&myOp);
