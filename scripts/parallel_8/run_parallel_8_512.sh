@@ -11,5 +11,5 @@
 module load mpich-3.2 # Load the required module
 export OMP_NESTED=TRUE
 export OMP_PLACES=threads
-export OMP_SCHEDULE="auto"
+export OMP_SCHEDULE="dynamic"
 mpiexec -np 8 HPC4DS_Project/executables/GTO_parallel_512
