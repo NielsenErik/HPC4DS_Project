@@ -19,7 +19,6 @@ void updateGlobalSilverback(MPI_Datatype dt, MPI_Op myOp, Gorilla *silverback) {
 
 int main() {
 	MPI_Init(NULL, NULL);
-    int provided;
     MPI_Barrier(MPI_COMM_WORLD);
     double t1 = MPI_Wtime();
     double lb, ub;
@@ -54,16 +53,16 @@ int main() {
         // Broadcast the data from the root process (rank 0) to all other processes
         MPI_Bcast(&C, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         MPI_Bcast(&L, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-        // ------------------------------------------------------------------------      
+        // ------------------------------------------------------------------------    
         exploration(C, L, lb, ub, M, gorilla_per_process, GX, &silverback, old_GX, X, n_threads);
         updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
-        //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);        
-        MPI_Allreduce(M, global_M, DIM, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD); // Use MPI_Allreduce to compute the global sum array
-        exploitation(C, L, lb, ub, global_M, gorilla_per_process, GX, &silverback, X, n_threads);
+        //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);   
         double t_1 = MPI_Wtime();
-        updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
+        MPI_Allreduce(M, global_M, DIM, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD); // Use MPI_Allreduce to compute the global sum array
         double t_2 = MPI_Wtime();
-        printf("Main allreduce %f\n", t_2 - t_1);
+        printf("main %f, ", t_2 - t_1);
+        exploitation(C, L, lb, ub, global_M, gorilla_per_process, GX, &silverback, X, n_threads);
+        updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
         //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
     }
 
