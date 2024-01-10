@@ -1,6 +1,7 @@
 #!/bin/bash
 scripts/del.sh
 module load mpich-3.2 # Load the required module
+module load openmpi-4.0.4
 
 for ((DIM = 256; DIM <= 1024; DIM *= 2)); do
     # mpicc -g -Wall -o ./executables/GTO_serial_${DIM} -DDIM=$DIM ./C_files/GTO_serial.c ./C_files/common_functions.c ./C_files/optimization_functions.c -lm

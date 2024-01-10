@@ -41,16 +41,13 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
         for (j = 0; j < gorilla_per_process; j++) {
             #pragma omp parallel default(none) shared(old_silverback, GX, j, C, X, L, ub,lb, M) private(k) num_threads(n_threads) 
             {
-                #pragma omp for schedule(runtime)
+                #pragma omp for
                 for (k = 0; k < DIM; k++) {
                     GX[j].coordinates[k] = L * fabs(M[k] / DIM) * (X[j].coordinates[k] - old_silverback.coordinates[k]) + X[j].coordinates[k];
                     boundaryCheck(ub, lb, &GX[j].coordinates[k]);
                 }
             }
-            #pragma omp critical
-            {
-                checkForUpdatePosition(&GX[j], silverback, &X[j]);
-            }
+            checkForUpdatePosition(&GX[j], silverback, &X[j]);
         }
     }
     else{
@@ -60,7 +57,7 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
             if (rand01() >= 0.5)
                 #pragma omp parallel default(none) shared(old_silverback, GX, X, j, Q, ub,lb) private(k) num_threads(n_threads) 
                 {
-                    #pragma omp for schedule(runtime)
+                    #pragma omp for
                     for (k = 0; k < DIM; k++) {
                         GX[j].coordinates[k] = old_silverback.coordinates[k] - (old_silverback.coordinates[k] * Q - X[j].coordinates[k] * Q) * beta * randn();
                         boundaryCheck(ub, lb, &GX[j].coordinates[k]);
@@ -70,17 +67,14 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
                 double E = randn();
                 #pragma omp parallel default(none) shared(old_silverback, GX, X, j, Q, ub,lb, E) private(k) num_threads(n_threads) 
                 {
-                    #pragma omp for schedule(runtime)
+                    #pragma omp for
                     for (k = 0; k < DIM; k++) {
                         GX[j].coordinates[k] = old_silverback.coordinates[k] - (old_silverback.coordinates[k] * Q - X[j].coordinates[k] * Q) * beta * E;
                         boundaryCheck(ub, lb, &GX[j].coordinates[k]);
                     }
                 }
             }
-            #pragma omp critical
-            {
                 checkForUpdatePosition(&GX[j], silverback, &X[j]);
-            }
         }
     }
 }
@@ -93,16 +87,20 @@ void exploration(double C, double L, double lb, double ub, double M[], int goril
     }
     for (j = 0; j < gorilla_per_process; j++) {
         if (rand01() < p){
-            for(k = 0; k < DIM; k++) {
-                GX[j].coordinates[k] = (ub - lb) * rand01() + lb; // CHECKED
-                boundaryCheck(ub, lb, &GX[j].coordinates[k]);
-                M[k] += GX[j].coordinates[k];
+            #pragma omp parallel default(none) shared(GX, j, C, X, r, L, ub,lb, M) private(k) num_threads(n_threads)
+            {
+                # pragma omp for
+                for(k = 0; k < DIM; k++) {
+                    GX[j].coordinates[k] = (ub - lb) * rand01() + lb; // CHECKED
+                    boundaryCheck(ub, lb, &GX[j].coordinates[k]);
+                    M[k] += GX[j].coordinates[k];
+                }
             }
         }
         else if (rand01() >= 0.5){
-            #pragma omp parallel default(none) shared(GX, j, C, X, r, L, ub,lb, M) private(k) num_threads(n_threads) 
+            #pragma omp parallel default(none) shared(GX, j, C, X, r, L, ub,lb, M) private(k) num_threads(n_threads)
             {
-                # pragma omp for schedule(runtime)
+                # pragma omp for
                 for (k = 0; k < DIM; k++) {
                     GX[j].coordinates[k] = (rand01() - C) * X[r].coordinates[k] + L * unifrnd(C) * X[j].coordinates[k]; // CHECKED
                     boundaryCheck(ub, lb, &GX[j].coordinates[k]);
@@ -111,9 +109,9 @@ void exploration(double C, double L, double lb, double ub, double M[], int goril
             }
         }
         else{
-            #pragma omp parallel default(none) shared(old_GX, GX, j, C, X, r, L, ub,lb, M) private(k) num_threads(n_threads) 
+            #pragma omp parallel default(none) shared(old_GX, GX, j, C, X, r, L, ub,lb, M) private(k) num_threads(n_threads)
             {
-                #pragma omp for schedule(runtime)
+                #pragma omp for
                 for (k = 0; k < DIM; k++) {
                     GX[j].coordinates[k] = X[j].coordinates[k] - L * (L * (X[j].coordinates[k] - old_GX[r].coordinates[k]) + rand01() * (X[j].coordinates[k] - old_GX[r].coordinates[k])); // CHECKED
                     boundaryCheck(ub, lb, &GX[j].coordinates[k]);
@@ -121,10 +119,7 @@ void exploration(double C, double L, double lb, double ub, double M[], int goril
                 }
             }
         }
-        #pragma omp critical
-        {
-            checkForUpdatePosition(&GX[j], silverback, &X[j]);
-        }
+        checkForUpdatePosition(&GX[j], silverback, &X[j]);
     }
 }
 
@@ -152,16 +147,13 @@ void initialization(double *lb, double *ub, int gorilla_per_process, Gorilla GX[
     for (i = 0; i < gorilla_per_process; i++) {
         #pragma omp parallel default(none) shared(GX, i, X, ub,lb) private(j) num_threads(n_threads) 
         {
-            # pragma omp for schedule(runtime)
+            # pragma omp for
             for (j = 0; j < DIM; j++) {
                 X[i].coordinates[j] = rand01() * (*ub - *lb) + *lb;
                 GX[i].coordinates[j] = X[i].coordinates[j]; // Copy values to GX
             }
         }
-        #pragma omp critical
-        {
-            FUNCTION(&X[i]);
-        }
+        FUNCTION(&X[i]);
         
         if (X[i].fitness < silverback->fitness)
             memcpy(silverback, X, sizeof(Gorilla));
