@@ -50,6 +50,7 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
                     boundaryCheck(ub, lb, &tmp_GX.coordinates[k]);
                 }
             }
+            #pragma omp critical
             GX[j] = tmp_GX;
             checkForUpdatePosition(&GX[j], silverback, &X[j]);
         }
@@ -80,6 +81,7 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
                     }
                 }
             }
+            #pragma omp critical
             GX[j] = tmp_GX;
             checkForUpdatePosition(&GX[j], silverback, &X[j]);
         }
@@ -134,6 +136,7 @@ void exploration(double C, double L, double lb, double ub, double M[], int goril
                 }
             }
         }
+        #pragma omp critical
         GX[j] = tmp_GX;
         checkForUpdatePosition(&GX[j], silverback, &X[j]);
     }
@@ -171,6 +174,7 @@ void initialization(double *lb, double *ub, int gorilla_per_process, Gorilla GX[
                 tmp_GX.coordinates[j] = tmp_X.coordinates[j]; // Copy values to GX
             }
         }
+        #pragma omp critical
         X[i] = tmp_X;
         GX[i] = tmp_GX;
         FUNCTION(&X[i]);

@@ -9,6 +9,4 @@
 #PBS -q short_cpuQ
 
 module load mpich-3.2 # Load the required module
-export OMP_PLACES=threads
-export OMP_SCHEDULE="static, 8"
-mpiexec -np 8 $(pwd)/HPC4DS_Project/executables/GTO_parallel_
+mpiexec -np 8 ./HPC4DS_Project/executables/GTO_parallel_
