@@ -50,7 +50,10 @@ int main() {
         exploration(C, L, lb, ub, M, gorilla_per_process, GX, &silverback, old_GX, X);
         updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
         //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
+        double t_1 = MPI_Wtime();
         MPI_Allreduce(M, global_M, DIM, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD); // Use MPI_Allreduce to compute the global sum array
+        double t_2 = MPI_Wtime();
+        printf("Mainf %f\n", t_2 - t_1);
         exploitation(C, L, lb, ub, global_M, gorilla_per_process, GX, &silverback, X);
         updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
         //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);

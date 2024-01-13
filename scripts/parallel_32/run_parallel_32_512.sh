@@ -9,4 +9,5 @@
 #PBS -q short_cpuQ
 
 module load mpich-3.2 # Load the required module
+
 mpirun.actual -n 32 ./HPC4DS_Project/executables/GTO_parallel_512
