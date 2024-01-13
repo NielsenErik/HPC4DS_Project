@@ -18,7 +18,7 @@
 #define N 64
 #define p 0.03
 #define SELECTED_FUNCTION SPHERE
-#define T 1000
+#define T 100000
 #define W 0.8
 
 // Define numeric values for each function

@@ -42,12 +42,12 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
             // tmp variables ot avoid data race conditions
             Gorilla tmp_GX = GX[j];
             Gorilla tmp_X = X[j];
-            #pragma omp parallel default(none) shared(tmp_GX, tmp_X, GX, j, C, X, L, ub,lb, M) private(k) num_threads(n_threads) 
+            #pragma omp parallel default(none) shared(tmp_GX, tmp_X, j, C, L, old_silverback, ub,lb, M) private(k) num_threads(n_threads) 
             {
                 #pragma omp for
                 for (k = 0; k < DIM; k++) {
                     tmp_GX.coordinates[k] = L * fabs(M[k] / DIM) * (tmp_X.coordinates[k] - old_silverback.coordinates[k]) + tmp_X.coordinates[k];
-                    boundaryCheck(ub, lb, &GX[j].coordinates[k]);
+                    boundaryCheck(ub, lb, &tmp_GX.coordinates[k]);
                 }
             }
             GX[j] = tmp_GX;
@@ -61,7 +61,7 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
             Gorilla tmp_GX = GX[j];
             Gorilla tmp_X = X[j];
             if (rand01() >= 0.5)
-                #pragma omp parallel default(none) shared(tmp_GX, tmp_X, GX, X, j, Q, ub,lb) private(k) num_threads(n_threads) 
+                #pragma omp parallel default(none) shared(tmp_GX, tmp_X,old_silverback, j, Q, ub,lb) private(k) num_threads(n_threads) 
                 {
                     #pragma omp for
                     for (k = 0; k < DIM; k++) {
@@ -71,7 +71,7 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
                 }
             else {
                 double E = randn();
-                #pragma omp parallel default(none) shared(tmp_GX, tmp_X, GX, X, j, Q, ub,lb, E) private(k) num_threads(n_threads) 
+                #pragma omp parallel default(none) shared(tmp_GX, tmp_X, j, Q, ub,lb, E, old_silverback) private(k) num_threads(n_threads) 
                 {
                     #pragma omp for
                     for (k = 0; k < DIM; k++) {
@@ -95,14 +95,14 @@ void exploration(double C, double L, double lb, double ub, double M[], int goril
 
     // tmp variables ot avoid data race conditions
     Gorilla X_r = X[r];
-    Gorilla Old_GX_r = old_GX[r];
+    Gorilla old_GX_r = old_GX[r];
 
     for (j = 0; j < gorilla_per_process; j++) {
         // tmp variables ot avoid data race conditions
         Gorilla tmp_GX = GX[j];
         Gorilla tmp_X = X[j];
         if (rand01() < p){
-            #pragma omp parallel default(none) shared(tmp_GX, tmp_X, j, C, X, r, L, ub,lb, M) private(k) num_threads(n_threads)
+            #pragma omp parallel default(none) shared(tmp_GX, tmp_X, j, C, r, L, ub,lb, M) private(k) num_threads(n_threads)
             {
                 # pragma omp for
                 for(k = 0; k < DIM; k++) {
@@ -113,7 +113,7 @@ void exploration(double C, double L, double lb, double ub, double M[], int goril
             }
         }
         else if (rand01() >= 0.5){
-            #pragma omp parallel default(none) shared(tmp_GX, tmp_X, j, C, X_r, Old_GX_r, L, ub,lb, M) private(k) num_threads(n_threads)
+            #pragma omp parallel default(none) shared(tmp_GX, tmp_X, j, C, X_r, L, ub,lb, M) private(k) num_threads(n_threads)
             {
                 # pragma omp for
                 for (k = 0; k < DIM; k++) {
@@ -124,11 +124,11 @@ void exploration(double C, double L, double lb, double ub, double M[], int goril
             }
         }
         else{
-            #pragma omp parallel default(none) shared(tmp_GX, tmp_X, j, C, X, X_r, Old_GX_r, L, ub,lb, M) private(k) num_threads(n_threads)
+            #pragma omp parallel default(none) shared(tmp_GX, tmp_X, j, C, X_r, old_GX_r, L, ub,lb, M) private(k) num_threads(n_threads)
             {
                 #pragma omp for
                 for (k = 0; k < DIM; k++) {
-                    tmp_GX.coordinates[k] = tmp_X.coordinates[k] - L * (L * (tmp_X.coordinates[k] - Old_GX_r.coordinates[k]) + rand01() * (tmp_X.coordinates[k] - old_GX_r.coordinates[k])); // CHECKED
+                    tmp_GX.coordinates[k] = tmp_X.coordinates[k] - L * (L * (tmp_X.coordinates[k] - old_GX_r.coordinates[k]) + rand01() * (tmp_X.coordinates[k] - old_GX_r.coordinates[k])); // CHECKED
                     boundaryCheck(ub, lb, &tmp_GX.coordinates[k]);
                     M[k] += tmp_GX.coordinates[k];
                 }
@@ -163,7 +163,7 @@ void initialization(double *lb, double *ub, int gorilla_per_process, Gorilla GX[
     for (i = 0; i < gorilla_per_process; i++) {
         Gorilla tmp_GX = GX[i];
         Gorilla tmp_X = X[i];
-        #pragma omp parallel default(none) shared(tmp_GX, tmp_X, X, ub,lb) private(j) num_threads(n_threads) 
+        #pragma omp parallel default(none) shared(tmp_GX, tmp_X, ub,lb) private(j) num_threads(n_threads) 
         {
             # pragma omp for
             for (j = 0; j < DIM; j++) {

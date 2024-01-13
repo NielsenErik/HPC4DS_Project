@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
     //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
     for (i = 0; i < T; i++) {
-        double t_1 = MPI_Wtime();
+        // double t_1 = MPI_Wtime();
         double C, L, global_M[DIM], M[DIM];
         if (rank == 0)
             C = (cos(2.0 * rand01()) + 1) * (1.0 - (double)i / T), L = C * unifrnd(1);
@@ -67,8 +67,8 @@ int main(int argc, char **argv) {
         exploitation(C, L, lb, ub, global_M, gorilla_per_process, GX, &silverback, X, n_threads);
         
         updateGlobalSilverback(MPI_GORILLA, myOp, &silverback);
-        double t_2 = MPI_Wtime();
-        printf("ALL %f\n", t_2 - t_1);
+        // double t_2 = MPI_Wtime();
+        // printf("ALL %f\n", t_2 - t_1);
         //printSearchAgentsData(gorilla_per_process, rank, silverback.fitness, X);
     }
 
