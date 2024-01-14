@@ -50,6 +50,7 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
                     boundaryCheck(ub, lb, &tmp_GX.coordinates[k]);
                 }
             }
+            #pragma omp barrier
             #pragma omp master
             {
                 GX[j] = tmp_GX;
@@ -83,6 +84,7 @@ void exploitation(double C, double L, double lb, double ub, double M[], int gori
                     }
                 }
             }
+            #pragma omp barrier
             #pragma omp master
             {
                 GX[j] = tmp_GX;
@@ -140,6 +142,7 @@ void exploration(double C, double L, double lb, double ub, double M[], int goril
                 }
             }
         }
+        #pragma omp barrier
         #pragma omp master
         {
             GX[j] = tmp_GX;
@@ -180,6 +183,7 @@ void initialization(double *lb, double *ub, int gorilla_per_process, Gorilla GX[
                 tmp_GX.coordinates[j] = tmp_X.coordinates[j]; // Copy values to GX
             }
         }
+        #pragma omp barrier
         #pragma omp master
         {
             X[i] = tmp_X;

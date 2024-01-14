@@ -27,7 +27,8 @@ int main(int argc, char **argv) {
         int n_threads = 1;
     #endif
 
-    MPI_Init(NULL, NULL);
+    int provided;
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_FUNNELED, &provided);
     MPI_Barrier(MPI_COMM_WORLD);
     double t1 = MPI_Wtime();
     double lb, ub;
