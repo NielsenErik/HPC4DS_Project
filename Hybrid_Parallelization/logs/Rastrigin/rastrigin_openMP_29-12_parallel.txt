@@ -1,0 +1,12 @@
+RASTRIGIN, HYBRID 
+0 , 256, 512, 1024
+2, 1120.322397, 1166.186129, 1321.108470
+4, 149.458887, 192.503304, 1172.318655
+8, 128.503856, 152.563363, 1105.152030
+16, 118.748575, 135.219067, 165.444924
+32, 113.819220, 123.512725, 141.893571
+
+warning
+./C_files/common_functions.c: In function ‘initialization’:
+./C_files/common_functions.c:134:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+         #pragma omp parallel for num_threads((DIM <= 8) ? DIM : 16)

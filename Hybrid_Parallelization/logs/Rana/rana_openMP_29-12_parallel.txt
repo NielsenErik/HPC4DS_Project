@@ -1,0 +1,8 @@
+RASTRIGIN, HYBRID 
+0 , 256, 512, 1024
+2, 
+
+warning
+./C_files/common_functions.c: In function ‘initialization’:
+./C_files/common_functions.c:134:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+         #pragma omp parallel for num_threads((DIM <= 8) ? DIM : 16)
